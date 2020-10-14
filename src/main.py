@@ -1,57 +1,92 @@
-import airsim
+class WayPoint:
+    """
+    WayPoint is a class that defines the waypoints which are available on the map
+    """
+    def __init__(self, name = "defaultName", lat = 0.0, lon = 0.0):
+        """
+        Init the class with following properties:
+        name (str): name of the waypoint (default = "genericWaypoint")
+        lat (float): latitude of the waypoint (defalt = 0.0)
+        lon (float): longitude of the waypoint (default = 0.0)
+        """
+        self.name = name
+        self.lat = lat
+        self.lon = lon
 
-import sys
-import time
+    def __hash__(self):
+        return hash((self.name, self.lat, self.lon))
 
-print("""This script is designed to fly on the streets of the Neighborhood environment
-and assumes the unreal position of the drone is [160, -1500, 120].""")
+    def __eq__(self, other):
+        return (self.name, self.lat, self.lon) == (other.name, other.lat, other.lon)
 
-client = airsim.MultirotorClient()
-client.confirmConnection()
-client.enableApiControl(True)
+    def __ne__(self, other):
+        return not(self == other)
+    
+    def __str__(self):
+        return "name: {}, lat: {:>8}, lon: {:>8}".format(self.name, self.lat, self.lon)
 
-print("arming the drone...")
-client.armDisarm(True)
+class Graph:
+    """
+    Graph is an directed graph of `WayPoint`s stored using an adjacency matrix
+    """
+    def __init__(self):
+        """
+        Initializes an empty graph
+        """
+        self._graph = dict()
 
-state = client.getMultirotorState()
-if state.landed_state == airsim.LandedState.Landed:
-    print("taking off...")
-    client.takeoffAsync().join()
-else:
-    client.hoverAsync().join()
+    def insert(self, A):
+        """
+        Inserts a new node into the graph
+        A (WayPoint): The node which is to be inserted
+        """
+        assert type(A) == WayPoint
+        self._graph[A] = dict()
 
-time.sleep(1)
+    def connect(self, A, B, Weight):
+        """
+        connects two nodes already inserted into the graph
+        A (WayPoint): First Point
+        B (WayPoint): Second Point 
+        """
+        assert type(A) == WayPoint
+        assert type(B) == WayPoint
+        self._graph[A][B] = Weight
+        # self._graph[B][A] = Weight
 
-state = client.getMultirotorState()
-if state.landed_state == airsim.LandedState.Landed:
-    print("take off failed...")
-    sys.exit(1)
+    def __str__(self):
+        string = []
+        string.append("  ")
+        string += [i.name + " " for i in self._graph.keys()]
+        string += "\n"
+        for i in self._graph:
+            string.append(i.name + " ")
+            for j in self._graph:
+                try:
+                    string.append(str(self._graph[i][j])+" ")
+                    continue
+                except:
+                    string.append("0 ")
+                    continue
+            string.append("\n")
+        return "".join(string)
 
-# AirSim uses NED coordinates so negative axis is up.
-# z of -10 is 10 meters above the original launch point.
-z = -10
-print("make sure we are hovering at 7 meters...")
-client.moveToZAsync(z, 1).join()
-
-# see https://github.com/Microsoft/AirSim/wiki/moveOnPath-demo
-
-# this method is async and we are not waiting for the result since we are passing timeout_sec=0.
-
-print("flying on path...")
-result = client.moveOnPathAsync([airsim.Vector3r(0,0,z),
-                                airsim.Vector3r(100,0,z),
-                                airsim.Vector3r(-100,0,z),
-                                airsim.Vector3r(0,100,z),
-                                airsim.Vector3r(0,-100,z),
-                                airsim.Vector3r(0,0,z)],
-                        12, 120,
-                        airsim.DrivetrainType.ForwardOnly, airsim.YawMode(False,0), 20, 1).join()
-
-# drone will over-shoot so we bring it back to the start point before landing.
-client.moveToPositionAsync(0,0,z,1).join()
-print("landing...")
-client.landAsync().join()
-print("disarming...")
-client.armDisarm(False)
-client.enableApiControl(False)
-print("done.")
+if __name__ == "__main__":
+    A = WayPoint("A", 14.0, 13.0)
+    B = WayPoint("B", 3.14, -1.45)
+    C = WayPoint("C")
+    D = WayPoint("D")
+    E = WayPoint("E")
+    F = WayPoint("E")
+    G = Graph()
+    G.insert(A)
+    G.insert(B)
+    G.insert(C)
+    G.insert(D)
+    G.connect(A, B, 1)
+    G.connect(A, A, 1)
+    G.connect(A, C, 10)
+    G.connect(C, A, -10)
+    print(A)
+    print(B)
+    print(G)
