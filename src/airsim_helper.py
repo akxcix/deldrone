@@ -3,8 +3,8 @@ import waypoint
 import math
 
 # GLOBAL VARIABLES
-CRUISE_VELOCITY = 10     # 10 m/s
-CRUISE_ALTITUDE = -50    # 50 m
+CRUISE_VELOCITY = 10  # 10 m/s
+CRUISE_ALTITUDE = -50  # 50 m
 BASE_POSITION = waypoint.Waypoint(lat=30.35294, long=76.36183, name="BASE")
 
 
@@ -30,7 +30,8 @@ def traversePath(waypoints, client):
         ned = gps2ned(point)
         print(ned, point.name)
         client.moveToPositionAsync(
-            ned[0], ned[1], CRUISE_ALTITUDE, CRUISE_VELOCITY).join()
+            ned[0], ned[1], CRUISE_ALTITUDE, CRUISE_VELOCITY
+        ).join()
 
 
 def takeoffAndLandWithPath(waypoints, client):
