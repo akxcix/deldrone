@@ -1,6 +1,8 @@
-import airsim
-import waypoint
 import math
+
+import airsim
+
+import waypoint
 
 # GLOBAL VARIABLES
 CRUISE_VELOCITY = 10  # 10 m/s

@@ -1,6 +1,7 @@
 import airsim
-import waypoint
+
 import airsim_helper
+import waypoint
 
 client = airsim.MultirotorClient()
 client.confirmConnection()
