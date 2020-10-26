@@ -1,5 +1,4 @@
 import airsim
-
 import airsim_helper
 import waypoint
 

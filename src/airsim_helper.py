@@ -1,7 +1,6 @@
 import math
 
 import airsim
-
 import waypoint
 
 # GLOBAL VARIABLES
