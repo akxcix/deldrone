@@ -30,9 +30,8 @@ def traversePath(waypoints, client):
     for point in waypoints:
         ned = gps2ned(point)
         print(ned, point.name)
-        client.moveToPositionAsync(
-            ned[0], ned[1], CRUISE_ALTITUDE, CRUISE_VELOCITY
-        ).join()
+        client.moveToPositionAsync(ned[0], ned[1], CRUISE_ALTITUDE,
+                                   CRUISE_VELOCITY).join()
 
 
 def takeoffAndLandWithPath(waypoints, client):

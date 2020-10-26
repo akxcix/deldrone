@@ -19,9 +19,9 @@ class Waypoint:
         delta_lat = math.radians(other.lat) - math.radians(self.lat)
         delta_long = math.radians(other.long) - math.radians(self.long)
 
-        a = (math.sin((delta_lat) / 2)) ** 2 + math.cos(
-            math.radians(self.lat)
-        ) * math.cos(math.radians(other.lat)) * ((math.sin((delta_long) / 2)) ** 2)
+        a = (math.sin(
+            (delta_lat) / 2))**2 + math.cos(math.radians(self.lat)) * math.cos(
+                math.radians(other.lat)) * ((math.sin((delta_long) / 2))**2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
         return c * 6371000
@@ -38,9 +38,8 @@ class Waypoint:
         l_A = math.radians(self.long)
 
         x = math.cos(theta_B) * math.sin(l_B - l_A)
-        y = math.cos(theta_A) * math.sin(theta_B) - math.sin(theta_A) * math.cos(
-            theta_B
-        ) * math.cos(l_B - l_A)
+        y = math.cos(theta_A) * math.sin(theta_B) - math.sin(
+            theta_A) * math.cos(theta_B) * math.cos(l_B - l_A)
 
         beta = math.atan2(x, y)
 
