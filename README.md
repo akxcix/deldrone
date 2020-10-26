@@ -1,5 +1,5 @@
 # Deldrone
-This repository is part of my capstone project DelDrone. It contains the
+This repository is part of our capstone project DelDrone. It contains the
 code to be deployed on the drone using a companion computer.
 
 # Setup
