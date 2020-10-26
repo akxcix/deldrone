@@ -22,7 +22,7 @@ class Waypoint:
         
         return c*6371000
 
-    def getBearing(self, other):
+    def get_bearing(self, other):
         """
         get bearing in degrees from A -> B
         """
